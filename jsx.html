@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Zhgyl</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="js/react.js"></script>
+  <script src="js/react-dom.js"></script>
+  <script src="js/browser.min.js"></script>
+</head>
+<body>
+   <div id="example"></div>
+   <div id="examplecomponent"></div>
+   <div id="examplemultipletag"></div>
+   <div id="examplecomplexcomponent"></div>
+   <div id="examplebutton"></div>
+   <div id="examplemylist"></div>
+   <div id="examplemycomponent"></div>
+   <div id="examplemyswitch"></div>
+   <script type="text/babel">
+   //注意首字母为小写，会认为是普通的html标签，会识别不出来
+   var HelloMsg = React.createClass({
+       render:function(){
+           return <h1> Hello Component</h1>
+       }
+   })
+   //返回多个标签必须用容器包含
+   var MultipleTag = React.createClass({
+       render:function(){
+           return <div>
+                    <h1> Hello Component</h1>
+                    <p>this a proga</p>
+                  </div>
+       }
+   })
+   var TitleComponent = React.createClass({
+       render:function(){
+           return <h1>Hello React Component</h1>
+       }
+   })
+   var InfoComponent = React.createClass({
+       render:function(){
+           return <p>this is a good Style</p>
+       }
+   })
+   //复合组件
+   var ComplexComponent = React.createClass({
+       render:function(){
+           return <div>
+                    <TitleComponent/>
+                    <InfoComponent/>
+                  </div>
+       }
+   })
+   var ButtonComponent = React.createClass({
+       render:function(){
+           return <button>{this.props.buttonName}</button>
+       }
+   })
+   var MyList = React.createClass({
+       render:function(){
+           return <ol>
+           {
+               React.Children.map(this.props.children,function(child){
+                   return <li>{child}</li>
+               })
+           }
+           </ol>
+       }
+   })
+   var MyComponent = React.createClass({
+       handleClick:function(){
+        console.log(this.refs.inputText.value);
+       },
+       render:function(){
+           return <div>
+                    <input type="text" ref="inputText"/>
+                    <button onClick={this.handleClick}>ClickedMe</button>
+                  </div>   
+       }
+   })
+   var AComponent = React.createClass({
+       handleChange:function(){
+          this.props.funcSave(this.refs.inputText.value);
+       },
+       render:function(){
+           return <input type="text" onChange={this.handleChange} ref="inputText"/>
+       }
+   })
+   var BComponent = React.createClass({
+       render:function(){
+           return <button>{this.props.name}</button>
+       }
+   })
+   var MainComponent = React.createClass({
+       save:function(value){
+          console.log('in MainComponent value is '+ value)
+       },
+       render:function(){
+           return <div>
+                    <AComponent funcSave={this.save}/>
+                    <BComponent name="获取输入的值"/>
+                  </div>
+       }
+   })
+   var MySwitch = React.createClass({
+       getInitialState:function(){
+           return {switch:false}
+       },
+       handleClick:function(){
+          this.setState({switch:!this.state.switch});
+       },
+       render:function(){
+           return <button onClick={this.handleClick}>{"当前的状态为"+this.state.switch}</button>
+       }
+   })
+   ReactDOM.render(<div>{3+4}</div>,
+   document.getElementById('example'))
+   ReactDOM.render(<HelloMsg/>,
+   document.getElementById('examplecomponent'))
+   ReactDOM.render(<MultipleTag/>,
+   document.getElementById('examplemultipletag'))
+   ReactDOM.render(<ComplexComponent/>,
+   document.getElementById('examplecomplexcomponent'))
+   ReactDOM.render(<ButtonComponent buttonName="登录"/>,
+   document.getElementById('examplebutton'))
+   ReactDOM.render(
+   <MyList>
+      <span>test01</span>
+      <span>test02</span>
+      <span>test03</span>
+   </MyList>,
+   document.getElementById('examplemylist'))
+   ReactDOM.render(
+   <MyComponent/>,
+   document.getElementById('examplemycomponent'))
+   ReactDOM.render(
+   <MainComponent/>,
+   document.getElementById('examplemaincomponent'))
+   ReactDOM.render(
+   <MySwitch/>,
+   document.getElementById('examplemyswitch'))
+   </script>
+</body>
+</html>
